@@ -13,6 +13,7 @@ app.use(cors());
 
 
 //RUTAS
+app.use('/api/v1', require('./routes/users.routes'));
 
 //LISTENERS
 app.listen( port, () =>{
