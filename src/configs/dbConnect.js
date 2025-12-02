@@ -1,20 +1,17 @@
-const {Pool} = require('pg');
+const { Pool } = require('pg');
 
 const connect = async () => {
     const pool = new Pool({
         connectionString: process.env.STRINGDB
     })
     try {
-        await pool.connect()
-        console.log(pool, "AAAAAAAAAAAAAA")
-        return pool;
-
+        const client = await pool.connect()
+        console.log("Conectando a la base de datos");
+        return client;
     } catch (error) {
         console.log(error)
-    } finally{
-        console.log("Conexion terminada")
+        throw error;
     }
 }
 
-
-module.exports= connect;
+module.exports = connect;

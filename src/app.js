@@ -8,13 +8,16 @@ const port = process.env.PORT || 4001;
 
 //MIDDLEWARES
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 
 //RUTAS
 
+app.use('/api/v1/auth', require('./routes/auth.routes'));
+// app.use('/api/v1', require('./routes/favoritos.routes'))
+
 //LISTENERS
-app.listen( port, () =>{
+app.listen(port, () => {
     console.log(`Servidor activo en puerto ${port} 🐙​`)
 })
