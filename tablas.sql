@@ -1,3 +1,7 @@
+DROP TABLE favoritos;
+DROP TABLE usuarios;
+DROP TABLE peliculas;
+
 CREATE TABLE usuarios (
     id_usuario SERIAL PRIMARY KEY,
     nombre_usuario VARCHAR(50) NOT NULL,
