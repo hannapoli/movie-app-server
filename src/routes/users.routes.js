@@ -4,10 +4,10 @@ const { creandoUsuario, eliminarUsuario, editarUsuario, obtenerUsuario} = requir
 
 router.post('/usuario/crear', creandoUsuario);
 
-router.delete('/usuario/eliminar/:id', eliminarUsuario);
+//router.delete('/usuario/eliminar/:id', eliminarUsuario);
 
-router.put('/ususrio/editar/:id', editarUsuario);
+//router.put('/ususrio/editar/:id', editarUsuario);
 
-router.get('/usuario/obtener/:id', obtenerUsuario);
+//router.get('/usuario/obtener/:id', obtenerUsuario);
 
 module.exports = router;  
