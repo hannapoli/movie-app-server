@@ -5,19 +5,20 @@ const crearFavorito = async (req, res) =>{
     //console.log(id_pelicula, "id_pelicula")
     //console.log(id_usuario, "id_usuario")
     try {
-        const buscando = await Favorito.buscarExistencia(id_pelicula, id_usuario);
+        const encontrado = await Favorito.buscarExistencia(id_pelicula, id_usuario);
         //console.log(buscando)
-        if(buscando.length <= 0){
-            await Favorito.crearFavorito(id_pelicula, id_usuario)
+        if(encontrado.length <= 0){
+            const newFavorito = await Favorito.crearFavorito(id_pelicula, id_usuario)
             return res.status(201).json({
                 ok:true,
                 msg: `El favorito fue creado correctamente`,
+                data: newFavorito
             })
         }
         return res.status(409).json({
                 ok:false,
                 msg: `Ya esta agregado en favoritos`,
-            })
+        })
         
     } catch (error) {
         return res.status(500).json({
@@ -32,8 +33,13 @@ const buscarTodosFavUsuario = async (req, res) =>{
     const id_usuario = req.params.id
     try {
         const favoritos = await Favorito.todosFavoritosDeUser(id_usuario);
-        //mejorar consulta para tener mas datos
-        console.log(favoritos);
+        //console.log(favoritos);
+        if(favoritos.length == 0){
+            return res.status(201).json({
+                ok:true,
+                msg: `Este usuario no tiene favoritos`
+            })
+        }
         return res.status(201).json({
             ok:true,
             msg: `Estos son todos los favoritos`,
@@ -49,13 +55,22 @@ const buscarTodosFavUsuario = async (req, res) =>{
 };
 
 const eliminarFavorito = async (req, res) =>{
-    const id_favorito = req.params.id
+    const { id_favorito, id_pelicula, id_usuario } = req.body
+
     try {
-        const result = await Favorito.eliminarFavorito(id_favorito)
-        //arreglar mañana buscar mas opciones
-        return res.status(201).json({
-            ok:true,
-            msg: `Favorito eliminado correctamente`,
+        const encontrado = await Favorito.buscarExistencia(id_pelicula, id_usuario);        
+        if(encontrado.length > 0){
+            const result = await Favorito.eliminarFavorito(id_favorito)
+            return res.status(201).json({
+                ok:true,
+                msg: `Favorito eliminado correctamente`,
+                resp: result
+
+            })
+        }
+        return res.status(409).json({
+                ok:false,
+                msg: `El favorito no existe`,
         })
     } catch (error) {
         return res.status(500).json({
