@@ -6,8 +6,8 @@ CREATE TABLE usuarios (
     id_usuario SERIAL PRIMARY KEY,
     nombre_usuario VARCHAR(50) NOT NULL,
     role_usuario VARCHAR(20) DEFAULT('user') NOT NULL ,
-    email VARCHAR(50) UNIQUE NOT NULL,
-    contrasena VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    contrasena VARCHAR(100) NOT NULL,
     CONSTRAINT ck_role_usuario CHECK (role_usuario IN ('user', 'administrador'))
 );
 

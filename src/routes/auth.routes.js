@@ -6,7 +6,7 @@ const { validarInput } = require('../middlewares/validarInput');
 const { verificarJWT } = require('../middlewares/validarJWT');
 
 //Registar un usuario:
-router.post('/signup', [
+router.post('/auth/signup', [
     check('nombre_usuario')
         .notEmpty().withMessage("Escriba el nombre").bail()
         .trim()
@@ -22,7 +22,7 @@ router.post('/signup', [
     validarInput], registarUsuario);
 
 //Login de usuario:
-router.post('/login', [
+router.post('/auth/login', [
     check("email")
         .trim()
         .normalizeEmail()
@@ -35,6 +35,6 @@ router.post('/login', [
 ], loginUsuario);
 
 //Validar y renovar token:
-router.get('/renovar', verificarJWT, renovarToken);
+router.get('/auth/renovar', verificarJWT, renovarToken);
 
 module.exports = router;

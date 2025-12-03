@@ -15,7 +15,7 @@ app.use(cors());
 //RUTAS
 app.use('/api/v1', require('./routes/users.routes'));
 
-app.use('/api/v1/auth', require('./routes/auth.routes'));
+app.use('/api/v1', require('./routes/auth.routes'));
 app.use('/api/v1', require('./routes/favoritos.routes'))
 
 //LISTENERS
