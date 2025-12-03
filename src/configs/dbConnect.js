@@ -9,7 +9,7 @@ const connect = async () => {
         console.log("Conectando a la base de datos");
         return client;
     } catch (error) {
-        console.log(error)
+        console.log(error, 'Error conectando a la bbdd')
         throw error;
     }
 }

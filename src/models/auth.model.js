@@ -5,7 +5,7 @@ const crearUsuario = async ({ nombre_usuario, role_usuario, email, contrasena })
     let client, result;
     try {
         client = await connect();
-        console.log({ client })
+        console.log({ client }, 'CLIENTE')
         result = await client.query(queriesAuth.registro, [nombre_usuario, role_usuario, email, contrasena]);
         return result.rows[0];
     } catch (error) {

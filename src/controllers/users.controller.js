@@ -1,76 +1,86 @@
 const express = require('express');
-const { crearUsario } = require("../models/user.model");
+const { eliminarUsuarioModel, actualizarUsuarioModel, obtenerUsuarioModel } = require("../models/user.model");
 
 
-//crear usuario
-const creandoUsuario = async (req, res) =>{
-    const {nombre_usuario, role_usuario, email, contrasena} = req.body;
-    //console.log(nombre_usuario, role_usuario, email, contrasena, "desde nuevo usuario")
-    try {
-        const response = await crearUsario(nombre_usuario, role_usuario, email, contrasena)
-        console.log(response, "desde response")
-        res.status(201).json({
-            message: "Usuario creado exitosamente", 
-            user: response
-        });
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            message: "Error al crear el usuario",
-            error: error.message
-        });
-    }
-}
-
-
-/* //eliminar usuario
+//eliminar usuario
 const eliminarUsuario  = async (req, res) => {
-    const id = parseInt(req.params.id);
-
+   const correo_usuario = req.body.email;
     try {
-        await pool.query(queries.deleteUser, [id]);
-        res.status(200).json({message: "Usuario eliminado"});
+        await eliminarUsuarioModel(correo_usuario)
+        res.status(200).json({
+            ok:true,
+            msg: "Usuario eliminado"
+        });
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: "Error al eliminar el usuario"});
+        return res.status(500).json({
+            ok:false,
+            msg: "Error al eliminar el usuario"
+        });
     }
 }
- */
-
-
-/* //editar usuario
-const editarUsuario = async (req, res) => {
-    const id = parseInt(req.params.id);
-    const { nombre_usuario, role_usuario, email, contrasena } = req.body;   
-
-    try {
-        await pool.query(queries.updateUser, [nombre_usuario, role_usuario, email, contrasena, id]);
-        res.status(200).json({message: "Usuario actualizado"});
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message: "Error al actualizar el usuario"});
-    }   
-}
-
 
 //obtener usuario
 const obtenerUsuario = async (req, res) => {
-    const id = parseInt(req.params.id);
+    //console.log(req.params, "desde req params");
+    const { id } = req.params;
+    
     try {
-        const result = await pool.query(queries.getUserById, [id]);
-        res.status(200).json(result.rows[0]);       
+        const usuario = await obtenerUsuarioModel(id);
+        //console.log(usuario, "desde el usuario");
+        
+        if (!usuario) {
+            return res.status(404).json({ 
+                ok:false,
+                msg: "Usuario no encontrado" 
+            });
+        }
+        res.status(200).json(usuario);
+        
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: "Error al obtener el usuario"});
+        return res.status(500).json({
+            ok:false,
+            msg: "Error al obtener usuario" 
+        });
     }
-}
- */
-module.exports = {
-    creandoUsuario
-/*     eliminarUsuario,
+};
+
+//editar usuario
+const editarUsuario = async (req, res) => {
+    const { id } = req.params;
+    const { nombre_usuario, email, role_usuario, contrasena } = req.body;
+    
+    try {
+        const datos = { nombre_usuario, email, role_usuario, contrasena };
+        //console.log(datos);
+        const actualizado = await actualizarUsuarioModel(id, datos);
+        //console.log(actualizado);
+        
+        if (!actualizado) {
+            return res.status(404).json({ 
+                ok:false,
+                msg: "Usuario no encontrado" 
+            });
+        }
+        res.status(200).json({ 
+            ok:true,
+            msg: "Usuario actualizado" 
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok:false,
+             msg: "Error al actualizar usuario" 
+            });
+    }
+};
+
+
+module.exports = {    
+    eliminarUsuario,
     editarUsuario,
-    obtenerUsuario */
+    obtenerUsuario
 };
