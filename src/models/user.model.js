@@ -1,26 +1,57 @@
 const connect = require('../configs/dbConnect');
 const queries = require("../models/queryUsuario");
 
-//crear usuario
-const crearUsario = async (nombre_usuario, role_usuario="user", email, contrasena) =>{
+const eliminarUsuarioModel =  async (email) =>{
+    let cliente, result;
+    try{
+        cliente = await connect();
+        //console.log(cliente, "desde cliente modelo")
+        result = await cliente.query(queries.eliminarUsuario,[email])
+        //console.log(result, "desde result modelo")
+        return result.rows;
+
+    }catch (error) {
+        console.log(error)
+        throw error
+    }finally{
+        cliente.release();
+    }
+} 
+
+const obtenerUsuarioModel = async (id_usuario) => {
     let cliente, result;
     try {
         cliente = await connect();
-        //console.log(nombre_usuario, role_usuario, email, contrasena, "desde crearUsuario")
-        const data = await cliente.query(queries.crearUsuario, [nombre_usuario, role_usuario, email, contrasena]);
-        console.log(data, "desde data")
-        result = data.rows;
-        //console.log(result, "aqui el resultado")
-
+        //console.log(cliente, "desde cliente modelo obtener")
+        result = await cliente.query(queries.obtenerUsuario, [id_usuario]);
+        //console.log(result, "desde result modelo obtener")
+        return result.rows[0];
     } catch (error) {
         console.log(error)
-    } finally{
+        throw error;
+    } finally {
         cliente.release();
     }
-    return result;
-}
+};
 
+// Actualizar usuario por id
+const actualizarUsuarioModel = async (id_usuario, { nombre_usuario, email, role_usuario, contrasena }) => {
+    let cliente, result;
+    try {
+        cliente = await connect();
+        //console.log(cliente, "desde cliente modelo actualizar")
+        result = await cliente.query(queries.actualizarUsuario,[nombre_usuario, email, role_usuario, contrasena, id_usuario]);
+        //console.log(result, "desde result modelo actualizar")
+        return result.rowCount;
+    } catch (error) {
+        throw error;
+    } finally {
+        cliente.release();
+    }
+};
 
 module.exports = {
-    crearUsario
+    eliminarUsuarioModel,
+    obtenerUsuarioModel,
+    actualizarUsuarioModel   
 }
