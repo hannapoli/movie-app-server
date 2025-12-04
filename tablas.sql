@@ -13,12 +13,12 @@ CREATE TABLE usuarios (
 
 CREATE TABLE peliculas (
     id_pelicula SERIAL PRIMARY KEY,
-    tit_pelicula VARCHAR(50) NOT NULL,
-    img_pelicula VARCHAR(255),
-    ano_pelicula INT,
-    director VARCHAR(50),
-    genero VARCHAR(50),
-    duracion VARCHAR(10)
+    tit_pelicula VARCHAR(50) UNIQUE NOT NULL,
+    img_pelicula VARCHAR(255)NOT NULL,
+    ano_pelicula INT NOT NULL,
+    director VARCHAR(50) NOT NULL,
+    genero VARCHAR(50) NOT NULL,
+    duracion VARCHAR(10) NOT NULL
 );
 
 

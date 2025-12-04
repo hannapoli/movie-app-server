@@ -1,12 +1,79 @@
 const express = require('express');
-const { eliminarUsuarioModel, actualizarUsuarioModel, obtenerUsuarioModel } = require("../models/user.model");
+const bcrypt = require('bcryptjs');
+const { JWTgenerador } = require('../helpers/jwt');
+const { eliminarUsuarioModel, actualizarUsuarioModel, obtenerUsuarioModel, todosUserMenosYo } = require("../models/user.model");
+const modeloFavorito = require('../models/favorito.model');
+const { crearUsuario, buscarUsuarioPoremil} = require('../models/auth.model');
 
+
+const crearusuario = async (req, res) => {
+    const { nombre_usuario, email, role_usuario, contrasena } = req.body;
+    try {
+        const salt = bcrypt.genSaltSync();
+        const contrasenaEncriptada = bcrypt.hashSync(contrasena, salt);
+
+        //comprobar que el email no este registrado ya
+        const existe = await buscarUsuarioPoremil(email);
+        console.log(email)
+        if(existe.length > 0){
+            return res.status(401).json({
+                ok: false,
+                msg: "Este correo ya esta registrado."
+            });
+        }
+
+        const values = {
+            nombre_usuario,
+            role_usuario,
+            email,
+            contrasena: contrasenaEncriptada
+        };
+        //console.log(values)
+        
+        const data = await crearUsuario(values);
+
+        const payload = {
+            uid: data.id_usuario,
+            nombre_usuario: data.nombre_usuario,
+            role_usuario: data.role_usuario
+        };
+
+        const token = await JWTgenerador(payload);
+
+        return res.status(201).json({
+            ok: true,
+            msg: "Usuario creado correctamente.",
+            usuario: data,
+            token
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor. Consulte su administrador."
+        });
+    }
+};
 
 //eliminar usuario
 const eliminarUsuario  = async (req, res) => {
-   const correo_usuario = req.body.email;
+   const {id_usuario, email} = req.body;
     try {
-        await eliminarUsuarioModel(correo_usuario)
+        const encontrado = await obtenerUsuarioModel(id_usuario);
+        //console.log(encontrado);
+        if (encontrado.length == 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'el usuario con ese id no existe'
+            });
+        }
+        const buscadoEnfav = await modeloFavorito.buscarTodosFavidUser(id_usuario);
+        console.log(buscadoEnfav);
+        if(buscadoEnfav.length > 0){
+            const eliminarUserFav = await modeloFavorito.eliminarFavoritoUsers(id_usuario);
+        }
+        await eliminarUsuarioModel(email)
         res.status(200).json({
             ok:true,
             msg: "Usuario eliminado"
@@ -29,8 +96,7 @@ const obtenerUsuario = async (req, res) => {
     try {
         const usuario = await obtenerUsuarioModel(id);
         //console.log(usuario, "desde el usuario");
-        
-        if (!usuario) {
+        if (usuario.length == 0) {
             return res.status(404).json({ 
                 ok:false,
                 msg: "Usuario no encontrado" 
@@ -46,14 +112,51 @@ const obtenerUsuario = async (req, res) => {
         });
     }
 };
+const todosUser = async (req, res) => {
+    //console.log(req.params, "desde req params");
+    const { id } = req.params;
+    try {
+        const usuarios = await todosUserMenosYo(id);
+        //console.log(usuario, "desde el usuario");
+        if (usuarios.length == 0) {
+            return res.status(404).json({ 
+                ok:false,
+                msg: "no se encontraron los usuarios" 
+            });
+        }
+        return res.status(200).json({ 
+            ok:true,
+            msg: "Estos son todos los usuarios",
+            data: usuarios 
+        });
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok:false,
+            msg: "Error al obtener usuario" 
+        });
+    }
+};
 
+
+//comprobar y correguir si hace falta
 //editar usuario
 const editarUsuario = async (req, res) => {
     const { id } = req.params;
     const { nombre_usuario, email, role_usuario, contrasena } = req.body;
     
     try {
-        const datos = { nombre_usuario, email, role_usuario, contrasena };
+        const usuario = await obtenerUsuarioModel(id);
+        if (usuario.length == 0) {
+            return res.status(404).json({ 
+                ok:false,
+                msg: "Usuario no encontrado" 
+            });
+        }
+        const salt = bcrypt.genSaltSync();
+        const contrasenaEncriptada = bcrypt.hashSync(contrasena, salt);
+        const datos = { nombre_usuario, email, role_usuario, contrasenaEncriptada };
         //console.log(datos);
         const actualizado = await actualizarUsuarioModel(id, datos);
         //console.log(actualizado);
@@ -73,8 +176,8 @@ const editarUsuario = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             ok:false,
-             msg: "Error al actualizar usuario" 
-            });
+            msg: "Error al actualizar usuario" 
+        });
     }
 };
 
@@ -82,5 +185,7 @@ const editarUsuario = async (req, res) => {
 module.exports = {    
     eliminarUsuario,
     editarUsuario,
-    obtenerUsuario
+    obtenerUsuario,
+    todosUser,
+    crearusuario
 };

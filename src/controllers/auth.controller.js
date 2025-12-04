@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { JWTgenerador } = require('../helpers/jwt');
-const { crearUsuario, buscarUsuario, buscarUsuarioPorId } = require('../models/auth.model');
+const { crearUsuario, buscarUsuario, buscarUsuarioPorId, buscarUsuarioPoremil } = require('../models/auth.model');
 
 const registarUsuario = async (req, res) => {
     const { nombre_usuario, email, contrasena } = req.body;
@@ -14,6 +14,16 @@ const registarUsuario = async (req, res) => {
             email,
             contrasena: contrasenaEncriptada
         };
+        //comprobar que el email no este registrado ya
+        const existe = await buscarUsuarioPoremil(email);
+        console.log(email)
+        if(existe.length > 0){
+            return res.status(401).json({
+                ok: false,
+                msg: "Este correo ya esta registrado."
+            });
+        }
+
         const data = await crearUsuario(values);
 
 

@@ -2,7 +2,7 @@
 const { Router } = require('express');
 
 const { authUsuario, authAdmin } = require('../middlewares/rolAuth');
-
+const { verificarJWT } = require('../middlewares/validarJWT');
 
 const router = Router();
 
@@ -19,23 +19,23 @@ const { validacionesPelicula, idValidaParam } = require('../middlewares/validar.
    
     //========== Rutas publicas ==========
 // Obtener todas las peliculas --> GET /api/v1/peliculas
-router.get('/peliculas', authUsuario, obtenerPeliculas);
+router.get('/peliculas', [verificarJWT, authUsuario], obtenerPeliculas);
 
 // Obtener pelicula por titulo --> GET /api/v1/peliculas/busqueda?title=algo
-router.get('/peliculas/busqueda', authUsuario, obtenerPeliculaPorTitulo);
+router.post('/peliculas/busqueda',[verificarJWT, authUsuario], obtenerPeliculaPorTitulo);
 
 
     //========== Rutas de administrador ==========
 // Obtener película por ID --> GET /api/v1/admin/peliculas/:id
-router.get('/admin/peliculas/:id', authAdmin, idValidaParam, obtenerPeliculaPorId); 
+router.get('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam], obtenerPeliculaPorId); 
 
 // Crear nueva pelicula --> POST /api/v1/admin/peliculas
-router.post('/admin/peliculas', authAdmin, validacionesPelicula, crearNuevaPelicula);
+router.post('/admin/peliculas', [verificarJWT, authAdmin, validacionesPelicula], crearNuevaPelicula);
 
 // Actualizar película --> PUT /api/v1/admin/peliculas/:id
-router.put('/admin/peliculas/:id', authAdmin, idValidaParam, validacionesPelicula, actualizarPelicula);
+router.put('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam, validacionesPelicula], actualizarPelicula);
 
 // Borrar película --> DELETE /api/v1/admin/peliculas/:id
-router.delete('/admin/peliculas/:id', authAdmin, idValidaParam, borrarPelicula);
+router.delete('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam], borrarPelicula);
 
 module.exports = router;

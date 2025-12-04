@@ -13,10 +13,10 @@ const queriesPeliculas = {
     `,
 
     pedirPeliculaPorTitulo: `
-        SELECT * 
-        FROM peliculas 
-        WHERE LOWER(tit_pelicula) LIKE LOWER('%$1%')
-    `,
+        SELECT *
+        FROM peliculas
+        WHERE tit_pelicula ILIKE '%' || $1 || '%';
+    `,// el ILIKE HACE QUE PUEDES BUSCAR EN MAYUSCULAS Y MINUSCULAS
 
     creandoPelicula: `
         INSERT INTO peliculas (tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion) 
@@ -31,13 +31,12 @@ const queriesPeliculas = {
     `,
 
     verificarPelicula: `
-        SELECT 1 FROM peliculas WHERE id_pelicula = $1
+        SELECT * FROM peliculas WHERE id_pelicula = $1
     `,
 
 
     eliminandoPelicula: `
-        DELETE 
-        FROM peliculas WHERE id_pelicula = $1
+        DELETE FROM peliculas WHERE id_pelicula = $1
     `
 }
 

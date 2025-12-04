@@ -32,7 +32,7 @@ const traerPeliculaPorId = async (id) => {
         cliente = await pool();
 
         const respuesta = await cliente.query(queriesPeliculas.pedirPeliculaPorId, [id]);
-        result = respuesta.rows[0]; // Devolver solo la primera fila que coincide 
+        result = respuesta.rows;
 
     } catch (error) {
         console.log(error);
@@ -49,8 +49,10 @@ const traerPeliculaPorTitulo = async(title) =>{
         let cliente, result
     try {
         cliente = await pool();
-
-        const respuesta = await cliente.query(queriesPeliculas.pedirPeliculaPorTitulo, [`%${title}%`]);
+        //console.log(title);
+        //console.log(queriesPeliculas.pedirPeliculaPorTitulo);
+        const respuesta = await cliente.query(queriesPeliculas.pedirPeliculaPorTitulo, [title]);
+        console.log(respuesta, "resultado consulta");
         result = respuesta.rows;
 
     } catch (error) {
@@ -72,7 +74,7 @@ const crearPelicula = async(data) => {
         try {
         cliente = await pool();
         const respuesta = await cliente.query(queriesPeliculas.creandoPelicula, [tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion]);
-        result = respuesta.rows[0].id_pelicula; // Devolver el ID de la nueva pelicula
+        result = respuesta.rows; // Devolver el ID de la nueva pelicula
 
     } catch (error) {
         console.log(error);
@@ -95,8 +97,8 @@ const  editarPelicula = async(id, data) => {
         const respuesta = await cliente.query(
         queriesPeliculas.editandoPelicula, 
         [tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion, id] 
-    );
-        result = respuesta.rows[0] // Devolver todo
+    );//mejorar esto con lo de la consulta
+        result = respuesta.rows // Devolver todo
     } catch (error) {
         console.log(error);
         throw error
@@ -113,13 +115,6 @@ const eliminarPelicula = async (id) => {
         let cliente;
     try {
         cliente = await pool();
-
-        // Verificar si la película existe
-        const peliculaExistente = await cliente.query(queriesPeliculas.verificarPelicula, [id]);
-
-        if (peliculaExistente.rowCount === 0) { // No se han encontrado resultados..
-            return { error: "La pelicula no existe" }
-        }
         // Eliminar la película
         await cliente.query(queriesPeliculas.eliminandoPelicula, [id]);
 
@@ -127,9 +122,8 @@ const eliminarPelicula = async (id) => {
         return { message: 'Película eliminada correctamente' };
         
     } catch (error) {
-        // Mensaje de error
-        console.error("Error eliminando la película")
-        return { error: "Error interno del servidor" }
+        //console.error(error)
+        throw error;
     } finally {
         cliente.release();
     }

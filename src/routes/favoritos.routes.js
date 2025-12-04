@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { crearFavorito, buscarTodosFavUsuario, eliminarFavorito } = require('../controllers/favoritos.controller');
 const { check } = require('express-validator');
+const { authUsuario} = require('../middlewares/rolAuth');
+const { verificarJWT } = require('../middlewares/validarJWT');
+const { crearFavorito, buscarTodosFavUsuario, eliminarFavorito } = require('../controllers/favoritos.controller');
+
 
 router.post('/favorito/crear',[
     check('id_pelicula')
@@ -16,6 +19,8 @@ router.post('/favorito/crear',[
         .trim()
         .isInt().withMessage('El id de usuario tiene que ser un numero entero')
         .bail()
+    ,verificarJWT
+    ,authUsuario
 ], crearFavorito);
 router.get('/favoritos/user/:id',[
     check('id')
@@ -24,6 +29,8 @@ router.get('/favoritos/user/:id',[
         .trim()
         .isInt().withMessage('El id de usuario tiene que ser un numero entero')
         .bail()
+    ,verificarJWT
+    ,authUsuario
 ], buscarTodosFavUsuario);
 router.delete('/favorito/eliminar/:id',[
     check('id')
@@ -44,5 +51,7 @@ router.delete('/favorito/eliminar/:id',[
         .trim()
         .isInt().withMessage('El id de usuario tiene que ser un numero entero')
         .bail()
+    ,verificarJWT
+    ,authUsuario
 ], eliminarFavorito);
 module.exports = router;

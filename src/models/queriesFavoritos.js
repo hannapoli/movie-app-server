@@ -32,6 +32,22 @@ const queriesFav = {
     SELECT * 
     FROM favoritos 
     WHERE id_pelicula = $1 AND id_usuario = $2
+    `,
+    buscarExisteFavPeli: `
+    SELECT * 
+    FROM favoritos 
+    WHERE id_pelicula = $1
+    `,
+    eliminarFavPelis: `
+    DELETE FROM favoritos WHERE id_pelicula = $1
+    `,
+    buscarExisteFavUser: `
+    SELECT * 
+    FROM favoritos 
+    WHERE id_usuario = $1
+    `,
+    eliminarFavUsers: `
+    DELETE FROM favoritos WHERE id_usuario = $1
     `
 }
 
