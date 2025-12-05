@@ -9,11 +9,6 @@ const validacionesPelicula = [
     .notEmpty().withMessage('El título de la película es obligatorio')
     .isLength({min:2}).withMessage('El titulo debe tener al menos 2 caracteres'), 
 
-    body('img_pelicula')
-    .trim()
-    .notEmpty().withMessage('La imagen dela película es obligatoria')
-    .isURL().withMessage('Debe ser una URL válida'), 
-
     body('ano_pelicula')
     .notEmpty().withMessage('El año de la película es obligatorio')
     .isInt({min: 1800, max: new Date().getFullYear() })

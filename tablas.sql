@@ -30,6 +30,18 @@ CREATE TABLE favoritos (
     CONSTRAINT fk_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario)
 );
 
+-- TABLA DE UPLOADS
+CREATE TABLE uploads (
+    id SERIAL PRIMARY KEY,
+    filename VARCHAR(255) NOT NULL,
+    originalname VARCHAR(255) NOT NULL,
+    mimetype VARCHAR(100) NOT NULL,
+    size BIGINT NOT NULL,
+    nombre VARCHAR(100),        -- título o nombre asignado al archivo
+    descripcion TEXT,           -- descripción opcional
+    uploaded_at TIMESTAMP DEFAULT NOW()
+);
+
 
 INSERT INTO peliculas (tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion)
 VALUES
