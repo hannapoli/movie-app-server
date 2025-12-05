@@ -2,11 +2,10 @@ const Favorito = require('../models/favorito.model');
 
 const crearFavorito = async (req, res) =>{
     const {id_pelicula, id_usuario} = req.body
-    //console.log(id_pelicula, "id_pelicula")
-    //console.log(id_usuario, "id_usuario")
+    
     try {
         const encontrado = await Favorito.buscarExistencia(id_pelicula, id_usuario);
-        //console.log(buscando)
+        
         if(encontrado.length <= 0){
             const newFavorito = await Favorito.crearFavorito(id_pelicula, id_usuario)
             return res.status(201).json({

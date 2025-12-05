@@ -13,12 +13,11 @@ app.use(cors());
 
 
 //RUTAS
-app.use('/api/v1', require('./routes/users.routes'));
-
 app.use('/api/v1', require('./routes/auth.routes'));
+app.use('/api/v1', require('./routes/users.routes'));
 app.use('/api/v1', require('./routes/favoritos.routes'))
-
 app.use('/api/v1', require('./routes/movies.routes'))
+
 //LISTENERS
 app.listen(port, () => {
     console.log(`Servidor activo en puerto ${port} 🐙​`)

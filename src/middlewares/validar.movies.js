@@ -1,8 +1,5 @@
-// Validaciones para validar antes de crear o actualizar una película
-//Importar express-vcalidator
 const { body, param } = require('express-validator');
 
-// Validaciones
 const validacionesPelicula = [
     body('tit_pelicula')
     .trim()

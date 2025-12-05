@@ -1,1 +1,80 @@
-# movie-app-server
+# API REST de películas
+
+## Descripción
+
+Este proyecto es un backend para una aplicación de películas, desarrollado con Node.js y Express. Expone una API REST que permite gestionar usuarios, autenticación, películas y favoritos. El backend está desplegado en [Render](https://movie-app-server-gwvm.onrender.com/api/v1) y utiliza una base de datos PostgreSQL también alojada en Render.
+
+## Tecnologías y dependencias
+
+- **Node.js** y **Express** para el servidor y la API REST.
+- **PostgreSQL** como base de datos relacional.
+- **pg** para la conexión con la base de datos.
+- **dotenv** para la gestión de variables de entorno.
+- **bcryptjs** para el hash de contraseñas.
+- **jsonwebtoken** para autenticación con JWT.
+- **express-validator** para validaciones de entrada.
+- **cors** para permitir peticiones desde el frontend.
+/////////////////////multer
+
+## Conexión a la base de datos
+
+La conexión se realiza mediante la librería `pg` y la cadena de conexión se define en la variable de entorno `STRINGDB`. La base de datos está alojada en Render y contiene las tablas `usuarios`, `peliculas` y `favoritos`.
+
+## Modelos principales
+
+- **Autenticación**: Registro y login de usuarios.
+- **Usuario**: Gestión de usuarios. Roles: `user` y `administrador`.
+- **Película**: CRUD de películas, búsqueda por título e ID.
+- **Favorito**: Permite a los usuarios guardar y eliminar películas favoritas.
+
+## Validaciones
+
+- Autenticación y autorización con Jason Web Token y roles.
+- Validación de datos de entrada con `express-validator` (ej: email, contraseña fuerte, campos obligatorios).
+- Validaciones específicas en los middlewares para cada ruta.
+
+## Rutas principales
+
+### Autenticación (`/api/v1/auth`)
+- `POST /auth/signup`: Registro de usuario.
+- `POST /auth/login`: Login de usuario.
+- `GET /auth/renovar`: Renovar token JWT.
+
+### Usuarios (`/api/v1/usuario`)
+- `POST /usuario/crear`: Crear usuario (solo admin).
+- `DELETE /usuario/eliminar`: Eliminar usuario (solo admin).
+- `PUT /usuario/editar/:id`: Editar usuario (solo admin).
+- `GET /usuario/obtener/:id`: Obtener usuario por ID.
+
+### Películas (`/api/v1/peliculas`)
+- `GET /peliculas`: Obtener todas las películas (usuario autenticado).
+- `POST /peliculas/busqueda`: Buscar películas por título (usuario autenticado).
+
+#### Rutas de administrador (`/api/v1/admin/peliculas`)
+- `GET /admin/peliculas/:id`: Obtener película por ID.
+- `POST /admin/peliculas`: Crear nueva película.
+- `PUT /admin/peliculas/:id`: Actualizar película.
+- `DELETE /admin/peliculas/:id`: Eliminar película.
+
+### Favoritos (`/api/v1/favorito`)
+- `POST /favorito/crear`: Agregar película a favoritos.
+- `GET /favoritos/user/:id`: Obtener favoritos de un usuario.
+- `DELETE /favorito/eliminar/:id`: Eliminar favorito.
+
+## Cómo lanzar el proyecto localmente
+
+1. Clona el repositorio.
+2. Instala las dependencias:
+    ```bash
+    npm install
+    ```
+3. Crea un archivo `.env` con la variable `STRINGDB` (cadena de conexión a PostgreSQL) y `SECRET_KEY` (clave para JWT).
+4. Inicia el servidor:
+    ```bash
+    npm run start
+    ```
+5. El servidor estará disponible en el puerto definido en `.env` o por defecto en el `4001`.
+
+## Despliegue
+
+El backend y la base de datos están desplegados en Render.
