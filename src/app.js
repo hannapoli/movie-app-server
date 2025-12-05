@@ -5,11 +5,19 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 4001;
+const frontendUrl = 'https://movie-app-ne82.onrender.com';
+const corsOptions = {
+    origin: frontendUrl,
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
 
 //MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors(corsOptions));
 
 
 //RUTAS
