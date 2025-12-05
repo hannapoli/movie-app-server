@@ -28,7 +28,6 @@ const crearusuario = async (req, res) => {
             email,
             contrasena: contrasenaEncriptada
         };
-        //console.log(values)
         
         const data = await crearUsuario(values);
 
@@ -56,7 +55,6 @@ const crearusuario = async (req, res) => {
     }
 };
 
-//eliminar usuario
 const eliminarUsuario  = async (req, res) => {
    const {id_usuario, email} = req.body;
     try {
@@ -88,14 +86,12 @@ const eliminarUsuario  = async (req, res) => {
     }
 }
 
-//obtener usuario
 const obtenerUsuario = async (req, res) => {
-    //console.log(req.params, "desde req params");
     const { id } = req.params;
     
     try {
         const usuario = await obtenerUsuarioModel(id);
-        //console.log(usuario, "desde el usuario");
+
         if (usuario.length == 0) {
             return res.status(404).json({ 
                 ok:false,
@@ -113,15 +109,15 @@ const obtenerUsuario = async (req, res) => {
     }
 };
 const todosUser = async (req, res) => {
-    //console.log(req.params, "desde req params");
+
     const { id } = req.params;
     try {
         const usuarios = await todosUserMenosYo(id);
-        //console.log(usuario, "desde el usuario");
+        
         if (usuarios.length == 0) {
             return res.status(404).json({ 
                 ok:false,
-                msg: "no se encontraron los usuarios" 
+                msg: "No se encontraron los usuarios" 
             });
         }
         return res.status(200).json({ 
@@ -141,7 +137,6 @@ const todosUser = async (req, res) => {
 
 
 //comprobar y correguir si hace falta
-//editar usuario
 const editarUsuario = async (req, res) => {
     const { id } = req.params;
     const { nombre_usuario, email, role_usuario, contrasena } = req.body;

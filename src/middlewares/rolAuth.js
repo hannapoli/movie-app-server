@@ -1,7 +1,6 @@
-// Importar la función validarJWT
 const { verificarJWT } = require('./validarJWT');
 
-// crear middleware para filtrar el rol usuario / administrador
+//Comprobar el rol usuario / administrador
 
 const authUsuario = [verificarJWT, (req, res, next) => {
     if (req.userToken.role_usuario === 'user') return next();

@@ -26,7 +26,6 @@ const registarUsuario = async (req, res) => {
 
         const data = await crearUsuario(values);
 
-
         const payload = {
             uid: data.id_usuario,
             nombre_usuario: data.nombre_usuario,
