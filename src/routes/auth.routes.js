@@ -29,8 +29,7 @@ router.post('/auth/login', [
         .isEmail().withMessage("Escriba un correo electrónico válido.").bail()
         .isLength({ min: 5, max: 50 }).withMessage("Escriba un email válido válido"),
     check("contrasena", "La contraseña debe tener entre 6 y 10 caracteres, contener por lo menos una minúscula, una mayúscula, un número y un símbolo.")
-        .isStrongPassword({ minLength: 6 }).bail()
-        .isLength({ max: 10 }),
+        .isStrongPassword({ minLength: 6 }).bail(),
     validarInput
 ], loginUsuario);
 
