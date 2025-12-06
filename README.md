@@ -14,7 +14,7 @@ Este proyecto es un backend para una aplicación de películas, desarrollado con
 - **jsonwebtoken** para autenticación con JWT.
 - **express-validator** para validaciones de entrada.
 - **cors** para permitir peticiones desde el frontend.
-/////////////////////multer
+- **multer** para guardar los archivos.
 
 ## Conexión a la base de datos
 
@@ -36,30 +36,50 @@ La conexión se realiza mediante la librería `pg` y la cadena de conexión se d
 ## Rutas principales
 
 ### Autenticación (`/api/v1/auth`)
-- `POST /auth/signup`: Registro de usuario.
-- `POST /auth/login`: Login de usuario.
-- `GET /auth/renovar`: Renovar token JWT.
+- `POST /auth/signup`: registro de usuario.
+- `POST /auth/login`: login de usuario.
+- `GET /auth/renovar`: renovar token JWT.
 
 ### Usuarios (`/api/v1/usuario`)
-- `POST /usuario/crear`: Crear usuario (solo admin).
-- `DELETE /usuario/eliminar`: Eliminar usuario (solo admin).
-- `PUT /usuario/editar/:id`: Editar usuario (solo admin).
-- `GET /usuario/obtener/:id`: Obtener usuario por ID.
+- `POST /usuario/crear`: crear usuario (solo admin).
+- `DELETE /usuario/eliminar`: eliminar usuario (solo admin).
+- `PUT /usuario/editar/:id`: editar usuario (solo admin).
+- `GET /usuario/obtener/:id`: obtener usuario por ID.
 
 ### Películas (`/api/v1/peliculas`)
-- `GET /peliculas`: Obtener todas las películas (usuario autenticado).
-- `POST /peliculas/busqueda`: Buscar películas por título (usuario autenticado).
+- `GET /peliculas`: obtener todas las películas (usuario autenticado).
+- `POST /peliculas/busqueda`: buscar películas por título (usuario autenticado).
 
 #### Rutas de administrador (`/api/v1/admin/peliculas`)
-- `GET /admin/peliculas/:id`: Obtener película por ID.
-- `POST /admin/peliculas`: Crear nueva película.
-- `PUT /admin/peliculas/:id`: Actualizar película.
-- `DELETE /admin/peliculas/:id`: Eliminar película.
+- `GET /admin/peliculas/:id`: obtener película por ID.
+- `POST /admin/peliculas`: crear nueva película.
+- `PUT /admin/peliculas/:id`: actualizar película.
+- `DELETE /admin/peliculas/:id`: eliminar película.
 
 ### Favoritos (`/api/v1/favorito`)
-- `POST /favorito/crear`: Agregar película a favoritos.
-- `GET /favoritos/user/:id`: Obtener favoritos de un usuario.
-- `DELETE /favorito/eliminar/:id`: Eliminar favorito.
+- `POST /favorito/crear`: agregar película a favoritos.
+- `GET /favoritos/user/:id`: obtener favoritos de un usuario.
+- `DELETE /favorito/eliminar/:id`: eliminar favorito.
+
+### Uploads (imágenes)
+- `POST /api/v1/upload`: subir un archivo individual (campo: `imagen`).
+
+- `POST /api/v1/uploads`: subir múltiples archivos (campo: `imagenes`).
+
+- `GET /api/v1/uploads`: ver la lista de todos los archivos subidos.
+
+- `DELETE /api/v1/uploads/:filename`: eliminar un archivo por su nombre de la carpeta uploads/.
+
+## Subida de archivos e imágenes (Multer)
+
+Este proyecto utiliza Multer como middleware para gestionar la subida de archivos (imágenes de películas).
+
+- Los archivos se guardan en la carpeta `uploads/` del proyecto (debe existir y tener permisos de escritura).
+- El nombre del archivo se genera automáticamente con la fecha y el nombre original.
+- Solo los administradores pueden subir o actualizar imágenes de películas.
+
+- Los archivos subidos se pueden listar y eliminar mediante los endpoints `/uploads` y `/uploads/:filename`.
+
 
 ## Cómo lanzar el proyecto localmente
 
