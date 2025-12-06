@@ -51,6 +51,7 @@ La conexión se realiza mediante la librería `pg` y la cadena de conexión se d
 - `POST /peliculas/busqueda`: buscar películas por título (usuario autenticado).
 
 #### Rutas de administrador (`/api/v1/admin/peliculas`)
+- `GET /admin/peliculas`: obtener todas las películas.
 - `GET /admin/peliculas/:id`: obtener película por ID.
 - `POST /admin/peliculas`: crear nueva película.
 - `PUT /admin/peliculas/:id`: actualizar película.
@@ -63,11 +64,8 @@ La conexión se realiza mediante la librería `pg` y la cadena de conexión se d
 
 ### Uploads (imágenes)
 - `POST /api/v1/upload`: subir un archivo individual (campo: `imagen`).
-
 - `POST /api/v1/uploads`: subir múltiples archivos (campo: `imagenes`).
-
 - `GET /api/v1/uploads`: ver la lista de todos los archivos subidos.
-
 - `DELETE /api/v1/uploads/:filename`: eliminar un archivo por su nombre de la carpeta uploads/.
 
 ## Subida de archivos e imágenes (Multer)

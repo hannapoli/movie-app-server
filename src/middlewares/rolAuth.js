@@ -6,7 +6,7 @@ const authUsuario = [verificarJWT, (req, res, next) => {
     if (req.userToken.role_usuario === 'user') return next();
     return res.status(403).json({
         ok: false,
-        msg: 'Solo usuarios'
+        msg: 'Esta ruta está restringida a usuarios.'
      });
 }];
 
@@ -14,7 +14,7 @@ const authAdmin = [verificarJWT, (req, res, next) => {
     if (req.userToken.role_usuario === 'administrador') return next();
     return res.status(403).json({
         ok: false,
-        msg: 'Solo administradores'
+        msg: 'Esta ruta está restringida a administradores.'
      });
 }];
 

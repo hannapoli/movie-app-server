@@ -18,45 +18,48 @@ const {
 } = require('../controllers/movies.controller');
 
 const { validacionesPelicula, idValidaParam } = require('../middlewares/validar.movies')
-   
-    //========== Rutas publicas ==========
+
+//========== Rutas publicas ==========
 // Obtener todas las peliculas --> GET /api/v1/peliculas
 router.get('/peliculas', [verificarJWT, authUsuario], obtenerPeliculas);
 
 // Obtener pelicula por titulo --> GET /api/v1/peliculas/busqueda?title=algo
-router.post('/peliculas/busqueda',[verificarJWT, authUsuario], obtenerPeliculaPorTitulo);
+router.post('/peliculas/busqueda', [verificarJWT, authUsuario], obtenerPeliculaPorTitulo);
 
 
-    //========== Rutas de administrador ==========
+//========== Rutas de administrador ==========
+// Obtener todas las peliculas --> GET /api/v1/peliculas
+router.get('/admin/peliculas', [verificarJWT, authAdmin], obtenerPeliculas);
+
 // Obtener película por ID --> GET /api/v1/admin/peliculas/:id
-router.get('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam], obtenerPeliculaPorId); 
+router.get('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam], obtenerPeliculaPorId);
 
 // Crear nueva pelicula --> POST /api/v1/admin/peliculas
 router.post(
-    '/admin/peliculas', 
+    '/admin/peliculas',
     [
-        verificarJWT, 
-        authAdmin, 
-        upload.single('imagen'), 
+        verificarJWT,
+        authAdmin,
+        upload.single('imagen'),
         handleMulterErrors,
         validateFiles,
         validacionesPelicula
-    ], 
+    ],
     crearNuevaPelicula
 );
 
 // Actualizar película --> PUT /api/v1/admin/peliculas/:id
 router.put(
-    '/admin/peliculas/:id', 
+    '/admin/peliculas/:id',
     [
-        verificarJWT, 
-        authAdmin, 
-        idValidaParam, 
-        upload.single('imagen'), 
+        verificarJWT,
+        authAdmin,
+        idValidaParam,
+        upload.single('imagen'),
         handleMulterErrors,
-        validateFiles, 
+        validateFiles,
         validacionesPelicula
-    ], 
+    ],
     actualizarPelicula
 );
 

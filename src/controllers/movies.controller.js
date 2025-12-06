@@ -5,7 +5,7 @@ const { deleteFile } = require('../helpers/files.helper')
 
 //((================== Controladores para el recurso peliculas ==================))\\
 
-    // GET /api/v1/peliculas
+// GET /api/v1/peliculas
 // Devolver todas las peliculas que coincidan con la petición
 const obtenerPeliculas = async (req, res) => {
     try {
@@ -28,7 +28,7 @@ const obtenerPeliculas = async (req, res) => {
     }
 };
 
-    // GET /api/v1/peliculas/:id
+// GET /api/v1/peliculas/:id
 // Devolver la peliculas que coincidan con el 'id' de la petición
 const obtenerPeliculaPorId = async (req, res) => {
     try {
@@ -61,7 +61,7 @@ const obtenerPeliculaPorId = async (req, res) => {
     }
 };
 
-    // GET /api/v1/peliculas/busqueda?titulo=algo
+// GET /api/v1/peliculas/busqueda?titulo=algo
 // Devolver la peliculas que coincidan con el 'titulo' de la petición o parte de el
 const obtenerPeliculaPorTitulo = async (req, res) => {
     const { tit_pelicula } = req.body; // (si luego lo cambiáis a query, aquí sería req.query.tit_pelicula)
@@ -70,7 +70,7 @@ const obtenerPeliculaPorTitulo = async (req, res) => {
         const peliculas = await modeloPelicula.traerPeliculaPorTitulo(tit_pelicula);
         console.log(peliculas)
 
-        if (peliculas.length === 0){
+        if (peliculas.length === 0) {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontro una pelicula con ese titulo',
@@ -93,7 +93,7 @@ const obtenerPeliculaPorTitulo = async (req, res) => {
     }
 };
 
-    // POST /api/v1/peliculas
+// POST /api/v1/peliculas
 // Crear una nueva pelicula y guardarla
 const crearNuevaPelicula = async (req, res) => {
     const { tit_pelicula } = req.body
@@ -108,7 +108,7 @@ const crearNuevaPelicula = async (req, res) => {
 
         const existe = await modeloPelicula.traerPeliculaPorTitulo(tit_pelicula);
         //console.log(existe)
-        if (existe.length > 0){
+        if (existe.length > 0) {
             return res.status(404).json({
                 ok: false,
                 msg: 'Esta pelicula ya existe',
@@ -120,7 +120,7 @@ const crearNuevaPelicula = async (req, res) => {
         return res.status(201).json({
             ok: true,
             msg: 'Película creada correctamente',
-            id: idNuevaPelicula        
+            id: idNuevaPelicula
         });
 
     } catch (error) {
@@ -145,7 +145,7 @@ const crearNuevaPelicula = async (req, res) => {
 }
 
 
-    // PUT /api/v1/editarPelicula/:id
+// PUT /api/v1/editarPelicula/:id
 // Actualizar una pelicula que coincidan con el 'id' de la petición
 const actualizarPelicula = async (req, res) => {
     try {
@@ -186,7 +186,7 @@ const actualizarPelicula = async (req, res) => {
     }
 }
 
-    // DELETE /api/v1/eliminarPelicula/:id
+// DELETE /api/v1/eliminarPelicula/:id
 // Elimonar la pelicula que coincidan con el 'id' de la petición
 const borrarPelicula = async (req, res) => {
     try {
