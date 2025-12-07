@@ -2,57 +2,57 @@ const connect = require('../configs/dbConnect');
 const queriesAuth = require('./queriesAuth');
 
 const crearUsuario = async ({ nombre_usuario, role_usuario, email, contrasena }) => {
-    let client, result;
+    let cliente, result;
     try {
-        client = await connect();
-        result = await client.query(queriesAuth.registro, [nombre_usuario, role_usuario, email, contrasena]);
+        cliente = await connect();
+        result = await cliente.query(queriesAuth.registro, [nombre_usuario, role_usuario, email, contrasena]);
         return result.rows[0];
     } catch (error) {
         console.log(error);
         throw error;
     } finally {
-        client.release();
+        cliente.release();
     }
 };
 
 const buscarUsuario = async (email) => {
-    let client, result;
+    let cliente, result;
     try {
-        client = await connect();
-        result = await client.query(queriesAuth.login, [email]);
+        cliente = await connect();
+        result = await cliente.query(queriesAuth.login, [email]);
         return result.rows[0];
     } catch (error) {
         console.log(error);
         throw error;
     } finally {
-        client.release();
+        cliente.release();
     }
 };
 
 const buscarUsuarioPorId = async (id_usuario) => {
-    let client, result;
+    let cliente, result;
     try {
-        client = await connect();
-        result = await client.query(queriesAuth.renovarToken, [id_usuario]);
+        cliente = await connect();
+        result = await cliente.query(queriesAuth.renovarToken, [id_usuario]);
         return result.rows[0];
     } catch (error) {
         console.log(error);
         throw error;
     } finally {
-        client.release();
+        cliente.release();
     }
 };
 const buscarUsuarioPoremil = async (email) => {
-    let client, result;
+    let cliente, result;
     try {
-        client = await connect();
-        result = await client.query(queriesAuth.comprobarEmail, [email]);
+        cliente = await connect();
+        result = await cliente.query(queriesAuth.comprobarEmail, [email]);
         return result.rows;
     } catch (error) {
         console.log(error);
         throw error;
     } finally {
-        client.release();
+        cliente.release();
     }
 };
 

@@ -2,29 +2,32 @@
 const queriesPeliculas = {
 
     pedirPeliculas: `
-        SELECT * 
-        FROM peliculas
+        SELECT p.*, u.filename, u.originalname, u.mimetype, u.size 
+        FROM peliculas p
+        LEFT JOIN uploads u ON p.id_upload = u.id_upload
     `,
 
     pedirPeliculaPorId: `
-        SELECT * 
-        FROM peliculas 
-        WHERE id_pelicula = $1
+        SELECT p.*, u.filename, u.originalname, u.mimetype, u.size 
+        FROM peliculas p
+        LEFT JOIN uploads u ON p.id_upload = u.id_upload
+        WHERE p.id_pelicula = $1
     `,
 
     pedirPeliculaPorTitulo: `
-        SELECT *
-        FROM peliculas
-        WHERE tit_pelicula ILIKE '%' || $1 || '%';
-    `,// el ILIKE HACE QUE PUEDES BUSCAR EN MAYUSCULAS Y MINUSCULAS
+        SELECT p.*, u.filename, u.originalname, u.mimetype, u.size
+        FROM peliculas p
+        LEFT JOIN uploads u ON p.id_upload = u.id_upload
+        WHERE p.tit_pelicula ILIKE '%' || $1 || '%'
+    `,
 
     creandoPelicula: `
-        INSERT INTO peliculas (tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion) 
+        INSERT INTO peliculas (tit_pelicula, id_upload, ano_pelicula, director, genero, duracion) 
         VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING id_pelicula
     `,
     editandoPelicula: `
-        UPDATE peliculas SET tit_pelicula = $1, img_pelicula = $2, ano_pelicula = $3,
+        UPDATE peliculas SET tit_pelicula = $1, id_upload = $2, ano_pelicula = $3,
             director = $4, genero = $5, duracion = $6 
         WHERE id_pelicula = $7 
         RETURNING *

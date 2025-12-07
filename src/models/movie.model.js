@@ -1,128 +1,95 @@
-// Importar queriPeliculas
-const queriesPeliculas = require('./queriesPeliculas')
-
-// Traer al traductor de postgreSQL desde dbConnect
-const pool = require('../configs/dbConnect');
+const connect = require('../configs/dbConnect');
+const queriesPeliculas = require('./queriesPeliculas');
 
 // Obtener todas las peliculas
 const traerPeliculas = async () => {
     let cliente, result
-
     try {
-        cliente = await pool();
-
-        const respuesta = await cliente.query(queriesPeliculas.pedirPeliculas); // Traer desde Mpeliculas
-        result = respuesta.rows; // Devolver los datos
-
+        cliente = await connect();
+        result = await cliente.query(queriesPeliculas.pedirPeliculas);
+        return result.rows;
     } catch (error) {
         console.log(error);
         throw error
-
     } finally {
-        cliente.release(); // Finalizar la consulta
-    } 
-    return result;
+        cliente.release();
+    }
 }
-
 
 // Obtener una pelicula por ID
 const traerPeliculaPorId = async (id) => {
-        let cliente, result
+    let cliente, result
     try {
-        cliente = await pool();
-
-        const respuesta = await cliente.query(queriesPeliculas.pedirPeliculaPorId, [id]);
-        result = respuesta.rows;
-
+        cliente = await connect();
+        result = await cliente.query(queriesPeliculas.pedirPeliculaPorId, [id]);
+        return result.rows;
     } catch (error) {
         console.log(error);
-        throw error
-
+        throw error;
     } finally {
-        cliente.release(); 
-    } 
-    return result;
+        cliente.release();
+    }
 }
 
 // Obtener pelicula por titulo
-const traerPeliculaPorTitulo = async(title) =>{
-        let cliente, result
-    try {
-        cliente = await pool();
-        //console.log(title);
-        //console.log(queriesPeliculas.pedirPeliculaPorTitulo);
-        const respuesta = await cliente.query(queriesPeliculas.pedirPeliculaPorTitulo, [title]);
-        console.log(respuesta, "resultado consulta");
-        result = respuesta.rows;
-
-    } catch (error) {
-        console.log(error);
-        throw error
-
-    } finally {
-        cliente.release(); 
-    } 
-    return result;
-}
-
-
-// Crear una película nueva
-const crearPelicula = async(data) => {
-
-        let cliente, result
-        const { tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion } = data; // Desestruturar desde datos
-        try {
-        cliente = await pool();
-        const respuesta = await cliente.query(queriesPeliculas.creandoPelicula, [tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion]);
-        result = respuesta.rows; // Devolver el ID de la nueva pelicula
-
-    } catch (error) {
-        console.log(error);
-        throw error
-
-    } finally {
-        cliente.release(); 
-    } 
-    return result;
-}
-
-
-// Editar una película
-const  editarPelicula = async(id, data) => {
+const traerPeliculaPorTitulo = async (title) => {
     let cliente, result
-    const { tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion } = data;
-
     try {
-        cliente = await pool();
-        const respuesta = await cliente.query(
-        queriesPeliculas.editandoPelicula, 
-        [tit_pelicula, img_pelicula, ano_pelicula, director, genero, duracion, id] 
-    );//mejorar esto con lo de la consulta
-        result = respuesta.rows // Devolver todo
+        cliente = await connect();
+        result = await cliente.query(queriesPeliculas.pedirPeliculaPorTitulo, [title]);
+        return result.rows;
     } catch (error) {
         console.log(error);
-        throw error
-
+        throw error;
     } finally {
-        cliente.release(); 
-    } 
+        cliente.release();
+    }
+}
+
+const crearPelicula = async ({ tit_pelicula, id_upload, ano_pelicula, director, genero, duracion }) => {
+    let cliente, result
+    try {
+        cliente = await connect();
+        result = await cliente.query(queriesPeliculas.creandoPelicula, [tit_pelicula, id_upload, ano_pelicula, director, genero, duracion]);
+        return result.rows[0];
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        cliente.release();
+    }
+}
+
+const editarPelicula = async (id, data) => {
+    let cliente, result
+    const { tit_pelicula, id_upload, ano_pelicula, director, genero, duracion } = data;
+    try {
+        cliente = await connect();
+        result = await cliente.query(
+            queriesPeliculas.editandoPelicula,
+            [tit_pelicula, id_upload, ano_pelicula, director, genero, duracion, id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        cliente.release();
+    }
     return result;
 }
 
-
-// Eliminar una pelicula
-const eliminarPelicula = async (id) => { 
-        let cliente;
+const eliminarPelicula = async (id) => {
+    let cliente, result;
     try {
-        cliente = await pool();
-        // Eliminar la película
-        await cliente.query(queriesPeliculas.eliminandoPelicula, [id]);
-
-        // Avisar de que todo salio bien
-        return { message: 'Película eliminada correctamente' };
-        
+        cliente = await connect();
+        result = await cliente.query(queriesPeliculas.eliminandoPelicula, [id]);
+        return {
+            msg: 'La imagen fue eliminada correctamente',
+            data: result.rows[0]
+        };
     } catch (error) {
-        //console.error(error)
+        console.error(error)
         throw error;
     } finally {
         cliente.release();

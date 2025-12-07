@@ -1,10 +1,8 @@
 //IMPORTACIONES
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+const path = require('node:path');
 require('dotenv').config();
-
-const uploadsRouter = require('./routes/uploads.routes');
 
 const app = express();
 const port = process.env.PORT || 4001;
@@ -29,9 +27,7 @@ const corsOptions = {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
-
-// Servir archivos estáticos de la carpeta uploads
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/api/v1/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 //RUTAS
 app.use('/api/v1', require('./routes/auth.routes'));

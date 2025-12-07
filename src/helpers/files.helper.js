@@ -3,10 +3,10 @@ const fs = require("fs");
 const path = require("path");
 
 // Eliminar un archivo (deletefile)
-const deleteFile = async (filename) => {    
+const deleteFile = async (filename) => {
     try {
         // Construir ruta completa del archivo a eliminar con path.json
-        const filePath = path.join(__dirname, '../uploads', filename);
+        const filePath = path.join(__dirname, '../public/uploads', filename);
 
         // Elimina el archivo de manera asíncrona usando fs.promises.unlink
         await fs.promises.unlink(filePath);

@@ -1,6 +1,6 @@
 // Importaciones
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const connect = require('../configs/dbConnect')
 const queriesUploads = require('../models/queries.uploads')
 const { deleteFile } = require('../helpers/files.helper');
@@ -8,10 +8,8 @@ const { deleteFile } = require('../helpers/files.helper');
 
 // Definir la función que manejara multer, del lado del servidor
 
-// Subir archivo (uploadFile)
-const uploadFile = async (req,  res) => {
+const uploadFile = async (req, res) => {
     try {
-        // Verificar si no existe el archivo
         if (!req.file) {
             return res.status(400).json({
                 ok: false,
@@ -21,17 +19,15 @@ const uploadFile = async (req,  res) => {
 
         // Recoger datos adicionales del formulario
         const { filename, originalname, mimetype, size } = req.file;
-        const { nombre, descripcion } = req.body; // datos extra del formulario
+        const { nombre, descripcion } = req.body;
 
-        // Obtener el cliente conectado
         const cliente = await connect();
 
-        // ejecutar la query
+        // Insertar en la "base de datos"
         const result = await cliente.query(
-             queriesUploads.crearUpload, [ filename, originalname, mimetype, size, nombre || null, descripcion || null]
+            queriesUploads.crearUpload, [filename, originalname, mimetype, size, nombre || null, descripcion || null]
         );
 
-        // Devolver la respuesta 
         res.status(200).json({
             ok: true,
             msg: 'Archivo subido correctamente y guardado en la base de datos',
@@ -46,18 +42,17 @@ const uploadFile = async (req,  res) => {
             msg: 'Ocurrió un error al subir el archivo'
         });
     } finally {
-        if (cliente) cliente.release(); // siempre liberar
+        if (cliente) cliente.release();
     }
 };
 
-// Subir múltiples archivos (uploadFiles)
+// Subir múltiples archivos 
 const uploadFiles = async (req, res) => {
     try {
         let cliente;
 
         // Validar que se envíen archivos
         if (!req.files || req.files.length === 0) {
-            // si no hay arvivo status(400)
             return res.status(400).json({
                 ok: false,
                 msg: 'No se encontraron archivos'
@@ -67,25 +62,22 @@ const uploadFiles = async (req, res) => {
         cliente = await connect();
 
         const resultados = []
-            // Recorrer los archivos y guardarlos en la "base de datos"
-            for (const file of req.files) {
+        // Recorrer los archivos y guardarlos en la base de datos
+        for (const file of req.files) {
             // Recoger datos adicionales del formulario
             const { filename, originalname, mimetype, size } = file;
             const { nombre, descripcion } = req.body; // datos extra del formulario
 
-
-            // Insertar en la "base de datos"
+            // Insertar en la base de datos
             const resultado = await cliente.query(
-                queriesUploads.crearUpload, [ filename, originalname, mimetype, size, nombre || null, descripcion || null]
-            ); 
-            // agregar
+                queriesUploads.crearUpload, [filename, originalname, mimetype, size, nombre || null, descripcion || null]
+            );
             resultados.push({
                 uploadId: resultado.rows[0].id,  // ID del primer registro de la base de datos
                 file // objeto con la información del archivo subido (filename, mimetype, size, etc.)
-            }) ;         
+            });
         };
 
-        // Si el archivo existe 
         res.status(200).json({
             ok: true,
             msg: 'Archivos subidos correctamente y guardados en la base de datos',
@@ -93,7 +85,6 @@ const uploadFiles = async (req, res) => {
         });
 
     } catch (error) {
-        // Si ocurre un error inesperado, mostrar en consola
         console.error(error)
         res.status(500).json({
             ok: false,
@@ -104,14 +95,11 @@ const uploadFiles = async (req, res) => {
     }
 };
 
-// Listar archivos subidos (getFiles)
 const getFiles = async (req, res) => {
     try {
-        // Carpeta donde se guardan los archivos ya subidos
-        const carpeta = path.join(__dirname, '../uploads');
+        const carpeta = path.join(__dirname, '../public/uploads');
         const files = await fs.promises.readdir(carpeta);
-        
-        // Comprobar si hay archivos
+
         if (files.length === 0) {
             return res.status(200).json({
                 ok: true,
@@ -120,7 +108,6 @@ const getFiles = async (req, res) => {
             });
         }
 
-        // Devolver estado ok
         res.status(200).json({
             ok: true,
             files,
@@ -137,8 +124,8 @@ const getFiles = async (req, res) => {
 };
 
 
-// Eliminar un archivo (deletefile) (usa fs.promises.unlink internamente) por lo que es "async"
-const deletfileControler = async (req, res) => {    
+// Eliminar un archivo (usa fs.promises.unlink internamente) por lo que es "async"
+const deletfileControler = async (req, res) => {
     try {
         // Recoger el nombre
         const { filename } = req.params;
@@ -153,9 +140,9 @@ const deletfileControler = async (req, res) => {
             });
         }
         return res.status(200).json({
-        ok: true,
-        msg: 'Archivo eliminado correctamente'
-    });
+            ok: true,
+            msg: 'Archivo eliminado correctamente'
+        });
 
     } catch (err) {
         console.error(err);

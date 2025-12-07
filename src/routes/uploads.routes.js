@@ -3,12 +3,12 @@
 const { Router } = require('express');
 const { upload, handleMulterErrors } = require('../middlewares/multer.middleware');
 const { validateFiles } = require('../middlewares/validar.uploads');
-const { 
-    uploadFile, 
-    uploadFiles,   
+const {
+    uploadFile,
+    uploadFiles,
     getFiles,
-    deletfileControler 
-} = require('../controllers/uploads.controllers'); 
+    deletfileControler
+} = require('../controllers/uploads.controller');
 
 
 // definir router para definir rutas separadas

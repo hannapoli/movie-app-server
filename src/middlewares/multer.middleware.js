@@ -1,16 +1,17 @@
 // Importar libreria
 const multer = require('multer');
+const path = require('node:path');
 
 // Configurar almacenamiento
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, path.join(__dirname, '../public/uploads/'));
     },
     filename: (req, file, cb) => {
         // crear el nombre con la fecha y el nombre original
         const name = Date.now() + '_' + file.originalname;
         cb(null, name);
-    }, 
+    },
 })
 
 const upload = multer({ storage })
@@ -19,9 +20,9 @@ const upload = multer({ storage })
 const handleMulterErrors = (err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 ok: false,
-                msg: 'Archivo demasiado grande' 
+                msg: 'Archivo demasiado grande'
             })
         }
 
@@ -39,7 +40,7 @@ const handleMulterErrors = (err, req, res, next) => {
     next();
 };
 
-module.exports = { 
+module.exports = {
     upload,
     handleMulterErrors
 };

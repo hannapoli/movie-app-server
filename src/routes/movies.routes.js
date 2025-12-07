@@ -3,8 +3,9 @@ const { Router } = require('express');
 
 const { authUsuario, authAdmin } = require('../middlewares/rolAuth');
 const { verificarJWT } = require('../middlewares/validarJWT');
-const { upload, handleMulterErrors } = require('../middlewares/multer.middleware')
-const { validateFiles } = require('../middlewares/validar.uploads')
+const { upload, handleMulterErrors } = require('../middlewares/multer.middleware');
+const { validateFiles } = require('../middlewares/validar.uploads');
+const { validarInput } = require('../middlewares/validarInput');
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.post('/peliculas/busqueda', [verificarJWT, authUsuario], obtenerPeliculaP
 router.get('/admin/peliculas', [verificarJWT, authAdmin], obtenerPeliculas);
 
 // Obtener película por ID --> GET /api/v1/admin/peliculas/:id
-router.get('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam], obtenerPeliculaPorId);
+router.get('/admin/peliculas/:id', [verificarJWT, authAdmin, ...idValidaParam, validarInput], obtenerPeliculaPorId);
 
 // Crear nueva pelicula --> POST /api/v1/admin/peliculas
 router.post(
@@ -43,7 +44,8 @@ router.post(
         upload.single('imagen'),
         handleMulterErrors,
         validateFiles,
-        validacionesPelicula
+        ...validacionesPelicula,
+        validarInput
     ],
     crearNuevaPelicula
 );
@@ -54,16 +56,17 @@ router.put(
     [
         verificarJWT,
         authAdmin,
-        idValidaParam,
+        ...idValidaParam,
         upload.single('imagen'),
         handleMulterErrors,
         validateFiles,
-        validacionesPelicula
+        ...validacionesPelicula,
+        validarInput
     ],
     actualizarPelicula
 );
 
 // Borrar película --> DELETE /api/v1/admin/peliculas/:id
-router.delete('/admin/peliculas/:id', [verificarJWT, authAdmin, idValidaParam], borrarPelicula);
+router.delete('/admin/peliculas/:id', [verificarJWT, authAdmin, ...idValidaParam, validarInput], borrarPelicula);
 
 module.exports = router;
