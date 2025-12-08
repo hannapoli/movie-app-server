@@ -9,12 +9,13 @@ const app = express();
 const port = process.env.PORT || 4001;
 const frontendUrl = 'https://movie-app-ne82.onrender.com';
 const localUrl = 'http://localhost:3002';
-const whitelist = [frontendUrl, localUrl, "*"];
+const whitelist = [frontendUrl, localUrl];
 const corsOptions = {
     origin: (origin, callback) => {
         if (whitelist.includes(origin) || !origin) {
             callback(null, true);
         } else {
+            console.log('Origen no permitido por CORS:', origin);
             callback(new Error('Esta conexión no está permitida por CORS'));
         }
     },
