@@ -1,3 +1,147 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Usuarios
+ *   description: Endpoints para gestión de usuarios
+ */
+
+/**
+ * @swagger
+ * /usuario/crear:
+ *   post:
+ *     summary: Crear un nuevo usuario
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre_usuario
+ *               - email
+ *               - contrasena
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "Ana Lopez"
+ *               email:
+ *                 type: string
+ *                 example: "ana@email.com"
+ *               contrasena:
+ *                 type: string
+ *                 example: "Ana123!"
+ *     responses:
+ *       201:
+ *         description: Usuario creado correctamente
+ *       400:
+ *         description: Error de validación
+ */
+
+/**
+ * @swagger
+ * /usuario/eliminar:
+ *   delete:
+ *     summary: Eliminar un usuario
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_usuario
+ *               - email
+ *             properties:
+ *               id_usuario:
+ *                 type: integer
+ *                 example: 1
+ *               email:
+ *                 type: string
+ *                 example: "ana@email.com"
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado correctamente
+ *       400:
+ *         description: Error de validación
+ */
+
+/**
+ * @swagger
+ * /usuario/editar/{id}:
+ *   put:
+ *     summary: Editar usuario por ID
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "Ana Lopez"
+ *               email:
+ *                 type: string
+ *                 example: "ana@email.com"
+ *               contrasena:
+ *                 type: string
+ *                 example: "Ana123!"
+ *     responses:
+ *       200:
+ *         description: Usuario editado correctamente
+ *       400:
+ *         description: Error de validación
+ */
+
+/**
+ * @swagger
+ * /usuario/obtener/{id}:
+ *   get:
+ *     summary: Obtener usuario por ID
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Datos del usuario
+ *       404:
+ *         description: Usuario no encontrado
+ */
+
+/**
+ * @swagger
+ * /usuario/todos/{id}:
+ *   get:
+ *     summary: Obtener todos los usuarios (admin)
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario admin
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios
+ *       403:
+ *         description: No autorizado
+ */
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');

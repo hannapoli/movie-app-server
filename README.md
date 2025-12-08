@@ -4,6 +4,7 @@
 
 Este proyecto es un backend para una aplicación de películas, desarrollado con Node.js y Express. Expone una API REST que permite gestionar usuarios, autenticación, películas y favoritos. El backend está desplegado en [Render](https://movie-app-server-gwvm.onrender.com/api/v1) y utiliza una base de datos PostgreSQL también alojada en Render.
 
+
 ## Tecnologías y dependencias
 
 - **Node.js** y **Express** para el servidor y la API REST.
@@ -15,6 +16,17 @@ Este proyecto es un backend para una aplicación de películas, desarrollado con
 - **express-validator** para validaciones de entrada.
 - **cors** para permitir peticiones desde el frontend.
 - **multer** para guardar los archivos.
+- **swagger-jsdoc** y **swagger-ui-express** para la documentación automática de la API con Swagger. Usamos estas dependencias para generar y mostrar una documentación interactiva y clara de todos los endpoints disponibles.
+
+
+## Documentación Swagger
+
+La API está documentada con Swagger. Puedes consultar la documentación interactiva en:
+
+- Local: [http://localhost:4001/api-docs](http://localhost:4001/api-docs)
+- Producción: [https://movie-app-ne82.onrender.com/api-docs](https://movie-app-ne82.onrender.com/api-docs)
+
+Swagger permite explorar, probar y entender fácilmente todos los endpoints, parámetros y respuestas de la API.
 
 ## Conexión a la base de datos
 

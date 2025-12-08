@@ -1,3 +1,86 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Autenticación
+ *   description: Endpoints para registro, login y renovación de token
+ */
+
+/**
+ * @swagger
+ * /auth/signup:
+ *   post:
+ *     summary: Registrar un nuevo usuario
+ *     tags: [Autenticación]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre_usuario
+ *               - email
+ *               - contrasena
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "Juan Perez"
+ *               email:
+ *                 type: string
+ *                 example: "juan@email.com"
+ *               contrasena:
+ *                 type: string
+ *                 example: "Password123!"
+ *     responses:
+ *       201:
+ *         description: Usuario registrado correctamente
+ *       400:
+ *         description: Error de validación
+ */
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Iniciar sesión de usuario
+ *     tags: [Autenticación]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - contrasena
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "juan@email.com"
+ *               contrasena:
+ *                 type: string
+ *                 example: "Password123!"
+ *     responses:
+ *       200:
+ *         description: Login exitoso, retorna token
+ *       401:
+ *         description: Credenciales inválidas
+ */
+
+/**
+ * @swagger
+ * /auth/renovar:
+ *   get:
+ *     summary: Renovar el token de autenticación
+ *     tags: [Autenticación]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token renovado correctamente
+ *       401:
+ *         description: Token inválido o expirado
+ */
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');

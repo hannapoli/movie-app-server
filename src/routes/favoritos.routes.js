@@ -1,3 +1,100 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Favoritos
+ *   description: Endpoints para gestión de favoritos de películas
+ */
+
+/**
+ * @swagger
+ * /favorito/crear:
+ *   post:
+ *     summary: Agregar película a favoritos
+ *     tags: [Favoritos]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_pelicula
+ *               - id_usuario
+ *             properties:
+ *               id_pelicula:
+ *                 type: integer
+ *                 example: 1
+ *               id_usuario:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       201:
+ *         description: Favorito creado correctamente
+ *       400:
+ *         description: Error de validación
+ */
+
+/**
+ * @swagger
+ * /favoritos/user/{id}:
+ *   get:
+ *     summary: Obtener favoritos de un usuario
+ *     tags: [Favoritos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Lista de favoritos del usuario
+ *       404:
+ *         description: Usuario no encontrado
+ */
+
+/**
+ * @swagger
+ * /favorito/eliminar/{id}:
+ *   delete:
+ *     summary: Eliminar favorito por ID
+ *     tags: [Favoritos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del favorito
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_pelicula
+ *               - id_usuario
+ *             properties:
+ *               id_pelicula:
+ *                 type: integer
+ *                 example: 1
+ *               id_usuario:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Favorito eliminado correctamente
+ *       404:
+ *         description: Favorito no encontrado
+ */
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');

@@ -6,6 +6,9 @@ const methodOverride = require('method-override');
 require('dotenv').config();
 
 const app = express();
+// SWAGGER
+const { swaggerUi, swaggerDocument } = require('./configs/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const port = process.env.PORT || 4001;
 const frontendUrl = 'https://movie-app-ne82.onrender.com';
 const localUrl = 'http://localhost:3002';

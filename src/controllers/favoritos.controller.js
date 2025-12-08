@@ -55,7 +55,7 @@ const buscarTodosFavUsuario = async (req, res) =>{
 
 const eliminarFavorito = async (req, res) =>{
     const { id_favorito, id_pelicula, id_usuario } = req.body
-
+    //console.log(id_favorito, id_pelicula, id_usuario)
     try {
         const encontrado = await Favorito.buscarExistencia(id_pelicula, id_usuario);        
         if(encontrado.length > 0){
