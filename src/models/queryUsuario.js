@@ -9,6 +9,7 @@ const queries = {
     UPDATE usuarios
     SET nombre_usuario = $1, email = $2, role_usuario = $3, contrasena = $4
     WHERE id_usuario = $5
+    RETURNING *
     `,
     todosLosUserMenosYo:`
     SELECT *

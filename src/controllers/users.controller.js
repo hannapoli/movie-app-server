@@ -69,7 +69,7 @@ const eliminarUsuario  = async (req, res) => {
         const buscadoEnfav = await modeloFavorito.buscarTodosFavidUser(id_usuario);
         console.log(buscadoEnfav);
         if(buscadoEnfav.length > 0){
-            const eliminarUserFav = await modeloFavorito.eliminarFavoritoUsers(id_usuario);
+            const eliminarUserFav = await modeloFavorito.eliminarFavoritoUsers(email);
         }
         await eliminarUsuarioModel(email)
         res.status(200).json({
@@ -136,7 +136,6 @@ const todosUser = async (req, res) => {
 };
 
 
-//comprobar y correguir si hace falta
 const editarUsuario = async (req, res) => {
     const { id } = req.params;
     const { nombre_usuario, email, role_usuario, contrasena } = req.body;
@@ -149,9 +148,21 @@ const editarUsuario = async (req, res) => {
                 msg: "Usuario no encontrado" 
             });
         }
-        const salt = bcrypt.genSaltSync();
-        const contrasenaEncriptada = bcrypt.hashSync(contrasena, salt);
-        const datos = { nombre_usuario, email, role_usuario, contrasenaEncriptada };
+        //console.log(usuario[0].contrasena);
+        let contrasenaFinal;
+        if (contrasena && contrasena.trim() !== "") {
+            const salt = bcrypt.genSaltSync();
+            contrasenaFinal = bcrypt.hashSync(contrasena, salt);
+        } else {
+            contrasenaFinal = usuario[0].contrasena;
+        }
+        //console.log(contrasenaFinal);
+        const datos = { 
+            nombre_usuario, 
+            email, 
+            role_usuario, 
+            contrasena: contrasenaFinal 
+        };
         //console.log(datos);
         const actualizado = await actualizarUsuarioModel(id, datos);
         //console.log(actualizado);
@@ -164,7 +175,8 @@ const editarUsuario = async (req, res) => {
         }
         res.status(200).json({ 
             ok:true,
-            msg: "Usuario actualizado" 
+            msg: "Usuario actualizado",
+            data: actualizado
         });
 
     } catch (error) {
