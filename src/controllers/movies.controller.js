@@ -60,36 +60,53 @@ const obtenerPeliculaPorId = async (req, res) => {
     }
 };
 
-// Devolver la peliculas que coincidan con el 'titulo' de la petición o parte de el
+// Buscar películas por título (o parte del título)
 const obtenerPeliculaPorTitulo = async (req, res) => {
-    const { tit_pelicula } = req.body; // (si luego lo cambiáis a query, aquí sería req.query.tit_pelicula)
     try {
-        //console.log(title)
-        const peliculas = await modeloPelicula.traerPeliculaPorTitulo(tit_pelicula);
-        console.log(peliculas)
+        // 1. Obtenemos el título desde query
+        const titulo = req.query.title || req.params.titulo;
 
-        if (peliculas.length === 0) {
-            return res.status(404).json({
+
+        if (!titulo || titulo.trim() === "") {
+            return res.status(400).json({
                 ok: false,
-                msg: 'No se encontro una pelicula con ese titulo',
+                msg: "Debes enviar un título para buscar películas."
             });
         }
 
+
+        // 2. Llamamos al modelo usando el título correcto
+        const peliculas = await modeloPelicula.traerPeliculaPorTitulo(titulo);
+
+
+        // 3. Si no hay resultados
+        if (peliculas.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: "No se encontraron películas con ese título."
+            });
+        }
+
+
+        // 4. Respuesta correcta
         return res.status(200).json({
             ok: true,
-            msg: 'Películas obtenidas correctamente',
+            msg: "Películas obtenidas correctamente",
             data: peliculas
         });
 
+
     } catch (error) {
-        //console.error(error);
+        console.log("Error en obtenerPeliculaPorTitulo:", error);
+
+
         return res.status(500).json({
             ok: false,
-            msg: 'Ocurrió un error interno en la busqueda',
-            error: error
+            msg: "Error interno en la búsqueda",
         });
     }
 };
+
 
 // Crear una nueva pelicula y guardarla
 const crearNuevaPelicula = async (req, res) => {

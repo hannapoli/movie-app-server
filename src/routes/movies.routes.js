@@ -25,8 +25,9 @@ const { validacionesPelicula, idValidaParam } = require('../middlewares/validar.
 router.get('/peliculas', [verificarJWT, authUsuario], obtenerPeliculas);
 
 // Obtener pelicula por titulo --> GET /api/v1/peliculas/busqueda?title=algo
-router.post('/peliculas/busqueda', [verificarJWT, authUsuario], obtenerPeliculaPorTitulo);
-
+router.get('/peliculas/busqueda', [verificarJWT, authUsuario], obtenerPeliculaPorTitulo);
+// Obtener película por ID para usuarios
+router.get('/peliculas/:id', [verificarJWT, authUsuario], obtenerPeliculaPorId);
 
 //========== Rutas de administrador ==========
 // Obtener todas las peliculas --> GET /api/v1/peliculas

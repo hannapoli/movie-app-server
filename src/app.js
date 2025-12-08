@@ -30,6 +30,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use('/api/v1/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(methodOverride('_method'));
+app.use((req, res, next) => {
+    res.locals.usuario = req.session.usuario || null;
+    next();
+});
 
 //RUTAS
 app.use('/api/v1', require('./routes/auth.routes'));
