@@ -1,5 +1,21 @@
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     ArchivoSubido:
+ *       type: object
+ *       properties:
+ *         filename:
+ *           type: string
+ *           description: Nombre del archivo subido
+ *           example: "imagen1.jpg"
+ *         url:
+ *           type: string
+ *           description: URL de acceso al archivo
+ *           example: "https://movie-app-server-gwvm.onrender.com/uploads/imagen1.jpg"
+ */
+/**
+ * @swagger
  * tags:
  *   name: Uploads
  *   description: Endpoints para gestión de archivos subidos
@@ -24,6 +40,10 @@
  *     responses:
  *       201:
  *         description: Archivo subido correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ArchivoSubido'
  *       400:
  *         description: Error de validación
  */
@@ -49,6 +69,12 @@
  *     responses:
  *       201:
  *         description: Archivos subidos correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ArchivoSubido'
  *       400:
  *         description: Error de validación
  */
@@ -62,6 +88,12 @@
  *     responses:
  *       200:
  *         description: Lista de archivos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ArchivoSubido'
  */
 
 /**
@@ -80,6 +112,14 @@
  *     responses:
  *       200:
  *         description: Archivo eliminado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Archivo eliminado correctamente"
  *       404:
  *         description: Archivo no encontrado
  */

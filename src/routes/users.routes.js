@@ -1,5 +1,57 @@
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Usuario:
+ *       type: object
+ *       properties:
+ *         id_usuario:
+ *           type: integer
+ *           description: ID único del usuario
+ *           example: 1
+ *         nombre_usuario:
+ *           type: string
+ *           description: Nombre del usuario
+ *           example: "Ana Lopez"
+ *         email:
+ *           type: string
+ *           description: Email del usuario
+ *           example: "ana@email.com"
+ *         rol:
+ *           type: string
+ *           description: Rol del usuario
+ *           example: "admin"
+ *     UsuarioInput:
+ *       type: object
+ *       required:
+ *         - nombre_usuario
+ *         - email
+ *         - contrasena
+ *       properties:
+ *         nombre_usuario:
+ *           type: string
+ *           example: "Ana Lopez"
+ *         email:
+ *           type: string
+ *           example: "ana@email.com"
+ *         contrasena:
+ *           type: string
+ *           example: "Ana123!"
+ *     UsuarioDeleteInput:
+ *       type: object
+ *       required:
+ *         - id_usuario
+ *         - email
+ *       properties:
+ *         id_usuario:
+ *           type: integer
+ *           example: 1
+ *         email:
+ *           type: string
+ *           example: "ana@email.com"
+ */
+/**
+ * @swagger
  * tags:
  *   name: Usuarios
  *   description: Endpoints para gestión de usuarios
@@ -16,24 +68,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - nombre_usuario
- *               - email
- *               - contrasena
- *             properties:
- *               nombre_usuario:
- *                 type: string
- *                 example: "Ana Lopez"
- *               email:
- *                 type: string
- *                 example: "ana@email.com"
- *               contrasena:
- *                 type: string
- *                 example: "Ana123!"
+ *             $ref: '#/components/schemas/UsuarioInput'
  *     responses:
  *       201:
  *         description: Usuario creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
  *       400:
  *         description: Error de validación
  */
@@ -49,20 +91,18 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - id_usuario
- *               - email
- *             properties:
- *               id_usuario:
- *                 type: integer
- *                 example: 1
- *               email:
- *                 type: string
- *                 example: "ana@email.com"
+ *             $ref: '#/components/schemas/UsuarioDeleteInput'
  *     responses:
  *       200:
  *         description: Usuario eliminado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Usuario eliminado correctamente"
  *       400:
  *         description: Error de validación
  */
@@ -85,20 +125,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               nombre_usuario:
- *                 type: string
- *                 example: "Ana Lopez"
- *               email:
- *                 type: string
- *                 example: "ana@email.com"
- *               contrasena:
- *                 type: string
- *                 example: "Ana123!"
+ *             $ref: '#/components/schemas/UsuarioInput'
  *     responses:
  *       200:
  *         description: Usuario editado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
  *       400:
  *         description: Error de validación
  */
@@ -119,6 +153,10 @@
  *     responses:
  *       200:
  *         description: Datos del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
  *       404:
  *         description: Usuario no encontrado
  */
@@ -139,6 +177,12 @@
  *     responses:
  *       200:
  *         description: Lista de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Usuario'
  *       403:
  *         description: No autorizado
  */

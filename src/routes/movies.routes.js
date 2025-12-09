@@ -1,5 +1,68 @@
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Pelicula:
+ *       type: object
+ *       properties:
+ *         id_pelicula:
+ *           type: integer
+ *           description: ID único de la película
+ *           example: 1
+ *         tit_pelicula:
+ *           type: string
+ *           description: Título de la película
+ *           example: "Matrix"
+ *         ano_pelicula:
+ *           type: integer
+ *           description: Año de la película
+ *           example: 1999
+ *         director:
+ *           type: string
+ *           description: Director de la película
+ *           example: "Wachowski"
+ *         genero:
+ *           type: string
+ *           description: Género de la película
+ *           example: "Acción"
+ *         duracion:
+ *           type: integer
+ *           description: Duración en minutos
+ *           example: 120
+ *         filename:
+ *           type: string
+ *           description: Nombre de la imagen
+ *           example: "matrix.jpg"
+ *     PeliculaInput:
+ *       type: object
+ *       required:
+ *         - tit_pelicula
+ *         - ano_pelicula
+ *         - director
+ *         - genero
+ *         - duracion
+ *       properties:
+ *         tit_pelicula:
+ *           type: string
+ *           example: "Matrix"
+ *         ano_pelicula:
+ *           type: integer
+ *           example: 1999
+ *         director:
+ *           type: string
+ *           example: "Wachowski"
+ *         genero:
+ *           type: string
+ *           example: "Acción"
+ *         duracion:
+ *           type: integer
+ *           example: 120
+ *         imagen:
+ *           type: string
+ *           format: binary
+ */
+/**
+ * @swagger
  * tags:
  *   name: Películas
  *   description: Endpoints para gestión de películas
@@ -16,6 +79,12 @@
  *     responses:
  *       200:
  *         description: Lista de películas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Pelicula'
  */
 
 /**
@@ -39,6 +108,10 @@
  *     responses:
  *       200:
  *         description: Película encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pelicula'
  *       404:
  *         description: No encontrada
  */
@@ -54,6 +127,12 @@
  *     responses:
  *       200:
  *         description: Lista de películas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Pelicula'
  *       403:
  *         description: No autorizado
  */
@@ -76,6 +155,10 @@
  *     responses:
  *       200:
  *         description: Datos de la película
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pelicula'
  *       404:
  *         description: No encontrada
  */
@@ -93,29 +176,14 @@
  *       content:
  *         multipart/form-data:
  *           schema:
- *             type: object
- *             properties:
- *               tit_pelicula:
- *                 type: string
- *                 example: "Matrix"
- *               ano_pelicula:
- *                 type: integer
- *                 example: 1999
- *               director:
- *                 type: string
- *                 example: "Wachowski"
- *               genero:
- *                 type: string
- *                 example: "Acción"
- *               duracion:
- *                 type: integer
- *                 example: 120
- *               imagen:
- *                 type: string
- *                 format: binary
+ *             $ref: '#/components/schemas/PeliculaInput'
  *     responses:
  *       201:
  *         description: Película creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pelicula'
  *       400:
  *         description: Error de validación
  */
@@ -140,29 +208,14 @@
  *       content:
  *         multipart/form-data:
  *           schema:
- *             type: object
- *             properties:
- *               tit_pelicula:
- *                 type: string
- *                 example: "Matrix Reloaded"
- *               ano_pelicula:
- *                 type: integer
- *                 example: 2003
- *               director:
- *                 type: string
- *                 example: "Wachowski"
- *               genero:
- *                 type: string
- *                 example: "Acción"
- *               duracion:
- *                 type: integer
- *                 example: 138
- *               imagen:
- *                 type: string
- *                 format: binary
+ *             $ref: '#/components/schemas/PeliculaInput'
  *     responses:
  *       200:
  *         description: Película actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pelicula'
  *       400:
  *         description: Error de validación
  */
@@ -185,6 +238,14 @@
  *     responses:
  *       200:
  *         description: Película eliminada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Película eliminada correctamente"
  *       404:
  *         description: No encontrada
  */

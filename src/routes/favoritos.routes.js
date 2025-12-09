@@ -1,5 +1,39 @@
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Favorito:
+ *       type: object
+ *       properties:
+ *         id_favorito:
+ *           type: integer
+ *           description: ID único del favorito
+ *           example: 10
+ *         id_pelicula:
+ *           type: integer
+ *           description: ID de la película
+ *           example: 1
+ *         id_usuario:
+ *           type: integer
+ *           description: ID del usuario
+ *           example: 2
+ *     FavoritoInput:
+ *       type: object
+ *       required:
+ *         - id_pelicula
+ *         - id_usuario
+ *       properties:
+ *         id_pelicula:
+ *           type: integer
+ *           description: ID de la película
+ *           example: 1
+ *         id_usuario:
+ *           type: integer
+ *           description: ID del usuario
+ *           example: 2
+ */
+/**
+ * @swagger
  * tags:
  *   name: Favoritos
  *   description: Endpoints para gestión de favoritos de películas
@@ -18,20 +52,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - id_pelicula
- *               - id_usuario
- *             properties:
- *               id_pelicula:
- *                 type: integer
- *                 example: 1
- *               id_usuario:
- *                 type: integer
- *                 example: 2
+ *             $ref: '#/components/schemas/FavoritoInput'
  *     responses:
  *       201:
  *         description: Favorito creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Favorito'
  *       400:
  *         description: Error de validación
  */
@@ -54,6 +82,46 @@
  *     responses:
  *       200:
  *         description: Lista de favoritos del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_usuario:
+ *                   type: integer
+ *                   example: 2
+ *                 nombre_usuario:
+ *                   type: string
+ *                   example: "Juan Perez"
+ *                 peliculas:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id_favorito:
+ *                         type: integer
+ *                         example: 10
+ *                       id_pelicula:
+ *                         type: integer
+ *                         example: 1
+ *                       tit_pelicula:
+ *                         type: string
+ *                         example: "Matrix"
+ *                       filename:
+ *                         type: string
+ *                         example: "matrix.jpg"
+ *                       ano_pelicula:
+ *                         type: integer
+ *                         example: 1999
+ *                       director:
+ *                         type: string
+ *                         example: "Wachowski"
+ *                       genero:
+ *                         type: string
+ *                         example: "Acción"
+ *                       duracion:
+ *                         type: integer
+ *                         example: 120
  *       404:
  *         description: Usuario no encontrado
  */
@@ -78,20 +146,18 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - id_pelicula
- *               - id_usuario
- *             properties:
- *               id_pelicula:
- *                 type: integer
- *                 example: 1
- *               id_usuario:
- *                 type: integer
- *                 example: 2
+ *             $ref: '#/components/schemas/FavoritoInput'
  *     responses:
  *       200:
  *         description: Favorito eliminado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Favorito eliminado correctamente"
  *       404:
  *         description: Favorito no encontrado
  */

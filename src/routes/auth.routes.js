@@ -1,5 +1,60 @@
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     AuthSignupInput:
+ *       type: object
+ *       required:
+ *         - nombre_usuario
+ *         - email
+ *         - contrasena
+ *       properties:
+ *         nombre_usuario:
+ *           type: string
+ *           example: "Juan Perez"
+ *         email:
+ *           type: string
+ *           example: "juan@email.com"
+ *         contrasena:
+ *           type: string
+ *           example: "Password123!"
+ *     AuthLoginInput:
+ *       type: object
+ *       required:
+ *         - email
+ *         - contrasena
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: "juan@email.com"
+ *         contrasena:
+ *           type: string
+ *           example: "Password123!"
+ *     AuthResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           description: JWT generado
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         usuario:
+ *           type: object
+ *           properties:
+ *             id_usuario:
+ *               type: integer
+ *               example: 1
+ *             nombre_usuario:
+ *               type: string
+ *               example: "Juan Perez"
+ *             email:
+ *               type: string
+ *               example: "juan@email.com"
+ *             rol:
+ *               type: string
+ *               example: "user"
+ */
+/**
+ * @swagger
  * tags:
  *   name: Autenticación
  *   description: Endpoints para registro, login y renovación de token
@@ -16,24 +71,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - nombre_usuario
- *               - email
- *               - contrasena
- *             properties:
- *               nombre_usuario:
- *                 type: string
- *                 example: "Juan Perez"
- *               email:
- *                 type: string
- *                 example: "juan@email.com"
- *               contrasena:
- *                 type: string
- *                 example: "Password123!"
+ *             $ref: '#/components/schemas/AuthSignupInput'
  *     responses:
  *       201:
  *         description: Usuario registrado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
  *       400:
  *         description: Error de validación
  */
@@ -49,20 +94,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - contrasena
- *             properties:
- *               email:
- *                 type: string
- *                 example: "juan@email.com"
- *               contrasena:
- *                 type: string
- *                 example: "Password123!"
+ *             $ref: '#/components/schemas/AuthLoginInput'
  *     responses:
  *       200:
  *         description: Login exitoso, retorna token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
  *       401:
  *         description: Credenciales inválidas
  */
@@ -78,6 +117,10 @@
  *     responses:
  *       200:
  *         description: Token renovado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
  *       401:
  *         description: Token inválido o expirado
  */
