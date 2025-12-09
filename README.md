@@ -12,10 +12,10 @@ Este proyecto es un backend para una aplicación de películas, desarrollado con
 - **pg** para la conexión con la base de datos.
 - **dotenv** para la gestión de variables de entorno.
 - **bcryptjs** para el hash de contraseñas.
-- **jsonwebtoken** para autenticación con JWT.
+- **jsonwebtoken** para autenticación con JSON Web Token(JWT).
 - **express-validator** para validaciones de entrada.
 - **cors** para permitir peticiones desde el frontend.
-- **multer** para guardar los archivos.
+- **multer** para gestionar los archivos.
 - **swagger-jsdoc** y **swagger-ui-express** para la documentación automática de la API con Swagger. Usamos estas dependencias para generar y mostrar una documentación interactiva y clara de todos los endpoints disponibles.
 
 
@@ -24,13 +24,13 @@ Este proyecto es un backend para una aplicación de películas, desarrollado con
 La API está documentada con Swagger. Puedes consultar la documentación interactiva en:
 
 - Local: [http://localhost:4001/api-docs](http://localhost:4001/api-docs)
-- Producción: [https://movie-app-ne82.onrender.com/api-docs](https://movie-app-ne82.onrender.com/api-docs)
+- Producción: [https://movie-app-server-gwvm.onrender.com/api-docs/](https://movie-app-server-gwvm.onrender.com/api-docs/)
 
 Swagger permite explorar, probar y entender fácilmente todos los endpoints, parámetros y respuestas de la API.
 
 ## Conexión a la base de datos
 
-La conexión se realiza mediante la librería `pg` y la cadena de conexión se define en la variable de entorno `STRINGDB`. La base de datos está alojada en Render y contiene las tablas `usuarios`, `peliculas` y `favoritos`.
+La conexión se realiza mediante la librería `pg` y la cadena de conexión se define en la variable de entorno `STRINGDB`. La base de datos está alojada en Render y contiene las tablas `usuarios`, `peliculas`, `favoritos` y `uploads`.
 
 ## Modelos principales
 
@@ -38,10 +38,11 @@ La conexión se realiza mediante la librería `pg` y la cadena de conexión se d
 - **Usuario**: Gestión de usuarios. Roles: `user` y `administrador`.
 - **Película**: CRUD de películas, búsqueda por título e ID.
 - **Favorito**: Permite a los usuarios guardar y eliminar películas favoritas.
+Además, usamos el modelo **Upload** para gestionar las imágenes.
 
 ## Validaciones
 
-- Autenticación y autorización con Jason Web Token y roles.
+- Autenticación y autorización con JSON Web Token y roles.
 - Validación de datos de entrada con `express-validator` (ej: email, contraseña fuerte, campos obligatorios).
 - Validaciones específicas en los middlewares para cada ruta.
 
@@ -56,7 +57,7 @@ La conexión se realiza mediante la librería `pg` y la cadena de conexión se d
 - `POST /usuario/crear`: crear usuario (solo admin).
 - `DELETE /usuario/eliminar`: eliminar usuario (solo admin).
 - `PUT /usuario/editar/:id`: editar usuario (solo admin).
-- `GET /usuario/obtener/:id`: obtener usuario por ID.
+- `GET /usuario/obtener/:id`: obtener usuario por ID (solo admin).
 
 ### Películas (`/api/v1/peliculas`)
 - `GET /peliculas`: obtener todas las películas (usuario autenticado).
@@ -82,7 +83,7 @@ La conexión se realiza mediante la librería `pg` y la cadena de conexión se d
 
 ## Subida de archivos e imágenes (Multer)
 
-Este proyecto utiliza Multer como middleware para gestionar la subida de archivos (imágenes de películas).
+Este proyecto utiliza Multer como middleware para gestionar la subida de archivos (portadas de películas).
 
 - Los archivos se guardan en la carpeta `uploads/` del proyecto (debe existir y tener permisos de escritura).
 - El nombre del archivo se genera automáticamente con la fecha y el nombre original.
