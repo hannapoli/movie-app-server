@@ -272,10 +272,14 @@ const {
 const { validacionesPelicula, idValidaParam } = require('../middlewares/validar.movies')
 
 //========== Rutas publicas ==========
+
 // Obtener todas las peliculas --> GET /api/v1/peliculas
 router.get('/peliculas', [verificarJWT, authUsuario], obtenerPeliculas);
 
-// Obtener pelicula por titulo --> GET /api/v1/peliculas/busqueda?title=algo
+// Obtener película por ID --> GET /api/v1/peliculas/:id
+router.get('/peliculas/:id', [verificarJWT, authUsuario, ...idValidaParam, validarInput], obtenerPeliculaPorId);
+
+// Obtener pelicula por titulo --> POST /api/v1/peliculas/busqueda
 router.post('/peliculas/busqueda', [verificarJWT, authUsuario], obtenerPeliculaPorTitulo);
 
 
